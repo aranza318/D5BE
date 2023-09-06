@@ -53,18 +53,12 @@ cartsRouter.put("/:cid/products/:pid", async (req, res) => {
   const cid = req.params.cid;
   const pid = req.params.pid;
   const quantity = req.body.quantity;
-  const result = await CM.updateQuantityProductFromCart(cid, pid, quantity);
+  const result = await CM.updateQuantity(cid, pid, quantity);
 
   if (result) {
-    res.send({
-      status: "ok",
-      message: "El producto se actualizó correctamente!",
-    });
+      res.send({status:"ok", message:"El producto se actualizó correctamente!"});
   } else {
-    res.status(400).send({
-      status: "error",
-      message: "Error! No se pudo actualizar el Producto del Carrito!",
-    });
+      res.status(400).send({status:"error", message:"Error! No se pudo actualizar el Producto del Carrito!"});
   }
 });
 

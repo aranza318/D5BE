@@ -26,7 +26,7 @@ class CartManager {
   async getCarts() {
     return await cartModel.find().lean();
   }
-  //Agrega un cporducto al carrito por su ID
+  //Agrega un porducto al carrito por su ID
   async addProductToCart(cid, pid) {
     try {
       console.log(`Adding product ${pid} to cart ${cid}`);
@@ -66,28 +66,21 @@ class CartManager {
     }
   }
   
-  //Incrementa cantidad, pero esta funcion ya esta incluida en la de arriba asi que no es necesaria
-  async updateQuantityProductFromCart(cid, pid, quantity) {
+  //Cambia la cantidad de un porducto determinado en el carrito
+  async updateQuantity(cid, pid, quantity) {
     try {
-      if (this.validateId(cid)) {
-        const cart = await this.getCart(cid);
-        const product = cart.products.find((item) => item.product === pid);
-        product.quantity = quantity;
-
-        await cartModel.updateOne({ _id: cid }, { products: cart.products });
+        await cartModel.updateOne( { _id: cid },
+          { $set: { products: { product: pid, quantity: quantity } } });
         console.log("Product updated!");
 
         return true;
-      } else {
-        console.log("Not found!");
-
-        return false;
-      }
     } catch (error) {
-      return false;
+        console.log("Not found!");
+        
+        return false;
     }
-  }
-  //Burra un producto del carrito
+}
+  //Borra un producto del carrito
   async deleteProductFromCart(cid, pid) {
     try {
       if (this.validateId(cid)) {
